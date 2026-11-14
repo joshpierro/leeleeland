@@ -22,7 +22,6 @@ body {
   position: fixed;
   inset: 0;
   overscroll-behavior: none;
-  touch-action: none;
   user-select: none;
   -webkit-user-select: none;
 }
@@ -39,33 +38,18 @@ body {
   touch-action: none;
 }
 
-#controls-hint {
-  position: absolute;
-  right: max(16px, env(safe-area-inset-right));
-  bottom: max(14px, env(safe-area-inset-bottom));
-  padding: 9px 13px;
-  border: 1px solid rgb(255 255 255 / 75%);
-  border-radius: 999px;
-  background: rgb(255 250 235 / 88%);
-  box-shadow: 0 3px 12px rgb(46 73 60 / 12%);
-  color: #48665a;
-  font-size: 13px;
-  letter-spacing: 0.02em;
-  pointer-events: none;
-}
-
 #character-select {
   position: absolute;
   inset: 0;
   z-index: 1;
-  display: grid;
-  place-items: center;
+  display: flex;
   padding: max(18px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
     max(18px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
   background:
     radial-gradient(ellipse at 50% 0%, rgb(255 255 255 / 54%), transparent 58%),
     rgb(191 222 196 / 92%);
   overflow: auto;
+  touch-action: pan-y;
 }
 
 #character-select[hidden] {
@@ -74,6 +58,7 @@ body {
 
 .select-panel {
   width: min(100%, 760px);
+  margin: auto;
   padding: clamp(20px, 4vw, 38px);
   border: 2px solid rgb(255 255 255 / 88%);
   border-radius: 28px;
@@ -98,9 +83,15 @@ body {
 }
 
 .subtitle {
-  margin: 10px 0 22px;
+  margin: 10px 0 8px;
   color: #6a796c;
   font-size: clamp(14px, 2.5vw, 18px);
+}
+
+.touch-help {
+  margin: 0 0 20px;
+  color: #6a796c;
+  font-size: 13px;
 }
 
 .character-options {
@@ -228,6 +219,7 @@ body {
   box-shadow: 0 3px 12px rgb(46 73 60 / 14%);
   color: #48665a;
   font-size: 13px;
+  pointer-events: none;
 }
 
 #stats-hud[hidden],
@@ -246,15 +238,16 @@ body {
   position: absolute;
   z-index: 3;
   inset: 0;
-  display: grid;
-  place-items: center;
+  display: flex;
   overflow: auto;
   padding: max(72px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
   background: linear-gradient(180deg, #eac99e 0 58%, #b88765 58% 100%);
+  touch-action: pan-y;
 }
 
 .interior-panel {
   width: min(100%, 520px);
+  margin: auto;
   padding: clamp(18px, 4vw, 30px);
   border: 2px solid rgb(255 255 255 / 85%);
   border-radius: 24px;
@@ -367,8 +360,4 @@ body {
 
 .exit-button:hover {
   background: #e2ecdc;
-}
-
-body.inside-location #controls-hint {
-  display: none;
 }

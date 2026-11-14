@@ -19,6 +19,7 @@
   };
   const camera = { x: player.x, y: player.y };
   const keys = new Set();
+  const touch = { pointerId: null, startX: 0, startY: 0, dx: 0, dy: 0 };
   const characterImages = {};
   const characterCards = [...document.querySelectorAll(".character-card")];
   const startButton = document.getElementById("start-game");
@@ -179,6 +180,7 @@
     interiorScreen.hidden = false;
     document.body.classList.add("inside-location");
     keys.clear();
+    clearTouch();
   }
 
   function exitLocation() {
@@ -195,6 +197,7 @@
     interiorScreen.hidden = true;
     document.body.classList.remove("inside-location");
     keys.clear();
+    clearTouch();
   }
 
   function updatePlayer(deltaSeconds) {
@@ -205,12 +208,18 @@
     if (keys.has("ArrowUp") || keys.has("w")) dy -= 1;
     if (keys.has("ArrowDown") || keys.has("s")) dy += 1;
 
+    if (dx === 0 && dy === 0) {
+      dx = touch.dx;
+      dy = touch.dy;
+    }
+
     if (dx === 0 && dy === 0) return;
 
     const magnitude = Math.hypot(dx, dy);
     const distance = CONFIG.player.speed * deltaSeconds;
-    dx = (dx / magnitude) * distance;
-    dy = (dy / magnitude) * distance;
+    const scale = distance / Math.max(1, magnitude);
+    dx *= scale;
+    dy *= scale;
 
     if (canOccupy(player.x + dx, player.y)) player.x += dx;
     if (canOccupy(player.x, player.y + dy)) player.y += dy;
@@ -456,6 +465,35 @@
     drawDistrictLabels();
     drawPlayer();
     ctx.restore();
+    drawTouchControl();
+  }
+
+  function drawTouchControl() {
+    if (touch.pointerId === null || currentLocation) return;
+    const radius = CONFIG.touchControls.radius;
+    ctx.save();
+    ctx.fillStyle = "rgb(255 250 235 / 35%)";
+    ctx.strokeStyle = "rgb(255 250 235 / 75%)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(touch.startX, touch.startY, radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = "rgb(74 115 83 / 65%)";
+    ctx.beginPath();
+    ctx.arc(touch.startX + touch.dx * radius, touch.startY + touch.dy * radius, 19, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function clearTouch() {
+    const pointerId = touch.pointerId;
+    touch.pointerId = null;
+    touch.dx = 0;
+    touch.dy = 0;
+    if (pointerId !== null && canvas.hasPointerCapture(pointerId)) {
+      canvas.releasePointerCapture(pointerId);
+    }
   }
 
   function frame(timestamp) {
@@ -471,15 +509,59 @@
 
   window.addEventListener("keydown", (event) => {
     const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
-    if (preventScrollKeys.has(event.key)) event.preventDefault();
     if (!gameStarted || currentLocation) return;
+    if (preventScrollKeys.has(event.key)) event.preventDefault();
     keys.add(key);
   });
   window.addEventListener("keyup", (event) => {
     const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
     keys.delete(key);
   });
-  window.addEventListener("blur", () => keys.clear());
+  canvas.addEventListener("pointerdown", (event) => {
+    if (event.pointerType !== "touch" || !gameStarted || currentLocation || touch.pointerId !== null) return;
+    const bounds = canvas.getBoundingClientRect();
+    touch.pointerId = event.pointerId;
+    touch.startX = event.clientX - bounds.left;
+    touch.startY = event.clientY - bounds.top;
+    touch.dx = 0;
+    touch.dy = 0;
+    canvas.setPointerCapture(event.pointerId);
+  });
+  canvas.addEventListener("pointermove", (event) => {
+    if (event.pointerId !== touch.pointerId) return;
+    const bounds = canvas.getBoundingClientRect();
+    const dx = event.clientX - bounds.left - touch.startX;
+    const dy = event.clientY - bounds.top - touch.startY;
+    const distance = Math.hypot(dx, dy);
+    if (distance <= CONFIG.touchControls.deadZone) {
+      touch.dx = 0;
+      touch.dy = 0;
+      return;
+    }
+    const strength = Math.min(1, (distance - CONFIG.touchControls.deadZone) /
+      (CONFIG.touchControls.radius - CONFIG.touchControls.deadZone));
+    touch.dx = dx / distance * strength;
+    touch.dy = dy / distance * strength;
+  });
+  canvas.addEventListener("pointerup", (event) => {
+    if (event.pointerId === touch.pointerId) clearTouch();
+  });
+  canvas.addEventListener("pointercancel", (event) => {
+    if (event.pointerId === touch.pointerId) clearTouch();
+  });
+  canvas.addEventListener("lostpointercapture", (event) => {
+    if (event.pointerId === touch.pointerId) clearTouch();
+  });
+  window.addEventListener("blur", () => {
+    keys.clear();
+    clearTouch();
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      keys.clear();
+      clearTouch();
+    }
+  });
   window.addEventListener("resize", resizeCanvas);
   resizeCanvas();
   window.requestAnimationFrame(frame);

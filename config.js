@@ -78,6 +78,10 @@ const CONFIG = {
   camera: {
     followSmoothing: 7
   },
+  touchControls: {
+    radius: 48,
+    deadZone: 5
+  },
   time: {
     realSecondsPerGameMinute: 1
   },
