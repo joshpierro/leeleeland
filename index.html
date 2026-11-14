@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#c7e9d5">
+    <meta name="description" content="Find your place in the city.">
+    <title>Lee Lee Land</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main id="game-shell" aria-label="Lee Lee Land game">
+      <canvas id="game" aria-label="Top-down world of Lee Lee Land">
+        Your browser does not support HTML Canvas.
+      </canvas>
+      <div id="controls-hint" aria-hidden="true">Move: WASD or Arrow Keys</div>
+      <aside id="stats-hud" aria-label="Player stats" hidden>
+        <span>Money <strong id="money-value">$0</strong></span>
+        <span>Education <strong id="education-value">Level 0</strong></span>
+      </aside>
+      <section id="interior-screen" aria-labelledby="interior-title" hidden>
+        <div class="interior-panel">
+          <p class="eyebrow">YOU ARE INSIDE</p>
+          <h1 id="interior-title">Lee Lee Café</h1>
+          <p id="interior-description">Warm lights, fresh coffee, and a friendly counter.</p>
+          <div class="interior-room" aria-hidden="true">
+            <div class="room-window"></div>
+            <div class="room-counter"></div>
+            <div class="room-cup">☕</div>
+          </div>
+          <p id="action-message" role="status">What would you like to do?</p>
+          <div id="cafe-actions" class="interior-actions">
+            <button id="buy-mocaccino" type="button">Get Mocaccino ($10)</button>
+            <button id="cafe-job" type="button">Get a job</button>
+          </div>
+          <div id="school-actions" class="interior-actions" hidden>
+            <button id="study-education" type="button">Get education (+1 level)</button>
+          </div>
+          <button id="exit-location" class="exit-button" type="button">Exit to town</button>
+        </div>
+      </section>
+      <section id="character-select" aria-labelledby="game-title">
+        <div class="select-panel">
+          <p class="eyebrow">WELCOME TO</p>
+          <h1 id="game-title">Lee Lee Land</h1>
+          <p class="subtitle">Who would you like to explore with?</p>
+          <div class="character-options" role="group" aria-label="Choose your character">
+            <button class="character-card" type="button" data-character="boy" aria-pressed="false">
+              <span class="portrait"><img src="assets/lee-boy.jpg" alt=""></span>
+              <span class="character-name">Lee Boy</span>
+            </button>
+            <button class="character-card" type="button" data-character="girl" aria-pressed="false">
+              <span class="portrait"><img src="assets/lee-girl.jpg" alt=""></span>
+              <span class="character-name">Lee Girl</span>
+            </button>
+            <button class="character-card" type="button" data-character="cat" aria-pressed="false">
+              <span class="portrait"><img src="assets/lee-cat.png" alt=""></span>
+              <span class="character-name">Lee Cat</span>
+              <span class="character-note">Animal friend</span>
+            </button>
+          </div>
+          <p id="selection-status" role="status">Choose a character to begin.</p>
+          <button id="start-game" type="button" disabled>Start exploring</button>
+        </div>
+      </section>
+    </main>
+    <script src="config.js"></script>
+    <script src="game.js"></script>
+  </body>
+</html>
