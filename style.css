@@ -21,6 +21,7 @@ body,
 body {
   position: fixed;
   inset: 0;
+  height: 100dvh;
   overscroll-behavior: none;
   user-select: none;
   -webkit-user-select: none;
@@ -43,13 +44,14 @@ body {
   inset: 0;
   z-index: 1;
   display: flex;
-  padding: max(18px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
-    max(18px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
   background:
     radial-gradient(ellipse at 50% 0%, rgb(255 255 255 / 54%), transparent 58%),
     rgb(191 222 196 / 92%);
   overflow: auto;
   touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
 #character-select[hidden] {
@@ -57,9 +59,9 @@ body {
 }
 
 .select-panel {
-  width: min(100%, 760px);
+  width: min(100%, 620px);
   margin: auto;
-  padding: clamp(20px, 4vw, 38px);
+  padding: 22px 16px;
   border: 2px solid rgb(255 255 255 / 88%);
   border-radius: 28px;
   background: #fffaf0;
@@ -69,7 +71,7 @@ body {
 
 .eyebrow {
   margin: 0 0 5px;
-  color: #769375;
+  color: #597b60;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.2em;
@@ -78,52 +80,53 @@ body {
 #game-title {
   margin: 0;
   color: #496c53;
-  font-size: clamp(30px, 6vw, 48px);
+  font-size: clamp(32px, 9vw, 48px);
   line-height: 1.1;
 }
 
 .subtitle {
-  margin: 10px 0 8px;
-  color: #6a796c;
-  font-size: clamp(14px, 2.5vw, 18px);
+  margin: 12px 0 4px;
+  color: #355a40;
+  font-size: 19px;
+  font-weight: 800;
 }
 
 .touch-help {
-  margin: 0 0 20px;
-  color: #6a796c;
-  font-size: 13px;
+  margin: 0 0 16px;
+  color: #596e5d;
+  font-size: 14px;
 }
 
 .character-options {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(8px, 2vw, 16px);
+  gap: 8px;
 }
 
 .character-card {
   min-width: 0;
-  padding: 9px;
-  border: 2px solid #e8e4d7;
-  border-radius: 18px;
-  background: #f3f1e7;
+  padding: 6px 6px 10px;
+  border: 2px solid #dfe5d6;
+  border-radius: 16px;
+  background: #f3f5ea;
   color: #465e4d;
   font: inherit;
   cursor: pointer;
-  transition: border-color 140ms ease, background-color 140ms ease, transform 140ms ease;
-}
-
-.character-card:hover {
-  transform: translateY(-2px);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 140ms ease, background-color 140ms ease;
 }
 
 .character-card[aria-pressed="true"] {
-  border-color: #6da77c;
+  border-color: #418054;
   background: #e8f3e5;
   box-shadow: 0 0 0 3px rgb(109 167 124 / 20%);
 }
 
 .character-card:focus-visible,
-#start-game:focus-visible {
+#start-game:focus-visible,
+.interior-actions button:focus-visible,
+.exit-button:focus-visible {
   outline: 3px solid #578b69;
   outline-offset: 3px;
 }
@@ -131,7 +134,8 @@ body {
 .portrait {
   position: relative;
   display: grid;
-  height: clamp(128px, 28vh, 230px);
+  height: clamp(124px, 25vh, 210px);
+  height: clamp(124px, 25dvh, 210px);
   place-items: center;
   overflow: hidden;
   border-radius: 12px;
@@ -147,33 +151,26 @@ body {
   mix-blend-mode: multiply;
 }
 
-.character-name,
-.character-note {
+.character-name {
   display: block;
 }
 
 .character-name {
-  margin-top: 9px;
-  font-size: clamp(14px, 2.6vw, 18px);
+  margin-top: 8px;
+  font-size: clamp(14px, 3.8vw, 18px);
   font-weight: 800;
-}
-
-.character-note {
-  min-height: 1em;
-  margin-top: 2px;
-  color: #81907f;
-  font-size: 11px;
 }
 
 #selection-status {
   min-height: 1.4em;
-  margin: 15px 0 10px;
-  color: #6a796c;
-  font-size: 13px;
+  margin: 14px 0 10px;
+  color: #526b57;
+  font-size: 14px;
 }
 
 #start-game {
-  min-height: 48px;
+  width: 100%;
+  min-height: 56px;
   padding: 0 26px;
   border: 0;
   border-radius: 999px;
@@ -183,6 +180,7 @@ body {
   font-size: 16px;
   font-weight: 800;
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 #start-game:disabled {
@@ -190,19 +188,10 @@ body {
   cursor: not-allowed;
 }
 
-@media (max-width: 420px) {
-  .select-panel {
-    padding: 18px 12px;
-  }
-
-  .character-card {
-    padding: 6px;
-    border-radius: 14px;
-  }
-
-  .portrait {
-    height: clamp(120px, 27vh, 190px);
-  }
+.movement-tip {
+  margin: 12px 0 0;
+  color: #526b57;
+  font-size: 13px;
 }
 
 #stats-hud {
@@ -211,14 +200,14 @@ body {
   top: max(14px, env(safe-area-inset-top));
   left: max(14px, env(safe-area-inset-left));
   display: flex;
-  gap: 8px;
-  padding: 9px 12px;
+  gap: 12px;
+  padding: 10px 14px;
   border: 1px solid rgb(255 255 255 / 80%);
   border-radius: 14px;
   background: rgb(255 250 235 / 94%);
   box-shadow: 0 3px 12px rgb(46 73 60 / 14%);
   color: #48665a;
-  font-size: 13px;
+  font-size: 14px;
   pointer-events: none;
 }
 
@@ -240,20 +229,33 @@ body {
   inset: 0;
   display: flex;
   overflow: auto;
-  padding: max(72px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  padding: calc(70px + env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
   background: linear-gradient(180deg, #eac99e 0 58%, #b88765 58% 100%);
   touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
 .interior-panel {
   width: min(100%, 520px);
   margin: auto;
-  padding: clamp(18px, 4vw, 30px);
+  padding: 18px;
   border: 2px solid rgb(255 255 255 / 85%);
   border-radius: 24px;
   background: #fffaf0;
   box-shadow: 0 16px 42px rgb(65 48 35 / 24%);
-  text-align: center;
+  text-align: left;
+}
+
+.interior-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.interior-heading .eyebrow {
+  margin: 0;
 }
 
 .interior-panel h1 {
@@ -263,13 +265,14 @@ body {
 }
 
 .interior-panel > p:not(.eyebrow) {
-  color: #6a796c;
+  color: #526b57;
+  line-height: 1.45;
 }
 
 .interior-room {
   position: relative;
-  height: clamp(94px, 18vh, 140px);
-  margin: 18px 0;
+  height: clamp(105px, 18vh, 150px);
+  margin: 14px 0;
   overflow: hidden;
   border: 4px solid #ba8c67;
   border-radius: 16px;
@@ -299,6 +302,17 @@ body {
   background: #d39b6c;
 }
 
+.room-plant {
+  position: absolute;
+  bottom: 31px;
+  left: 12%;
+  width: 20px;
+  height: 27px;
+  border-radius: 12px 12px 5px 5px;
+  background: #6c9d6c;
+  box-shadow: 6px 7px 0 #91b97a;
+}
+
 .room-cup {
   position: absolute;
   right: 24%;
@@ -321,29 +335,34 @@ body {
 }
 
 #action-message {
-  min-height: 2.8em;
+  min-height: 1.5em;
   margin: 12px 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #edf4e9;
   color: #48665a;
   font-weight: 700;
 }
 
 .interior-actions {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: 1fr;
   gap: 10px;
 }
 
 .interior-actions button,
 .exit-button {
-  min-height: 46px;
-  padding: 9px 16px;
+  min-height: 52px;
+  padding: 12px 18px;
   border: 0;
   border-radius: 999px;
   background: #5e966d;
   color: #fff;
   font: inherit;
+  font-size: 16px;
   font-weight: 800;
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 .interior-actions button:hover,
@@ -352,10 +371,36 @@ body {
 }
 
 .exit-button {
-  margin-top: 12px;
+  min-height: 44px;
+  padding: 8px 16px;
   border: 2px solid #c9d8c5;
   background: #eef3e8;
   color: #48665a;
+}
+
+@media (min-width: 600px) {
+  .select-panel,
+  .interior-panel {
+    padding: 28px;
+  }
+
+  .character-options {
+    gap: 16px;
+  }
+
+  .interior-actions {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+@media (max-height: 500px) {
+  .portrait {
+    height: 110px;
+  }
+
+  .interior-room {
+    height: 90px;
+  }
 }
 
 .exit-button:hover {

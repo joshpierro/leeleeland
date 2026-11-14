@@ -166,8 +166,8 @@
     const isSchool = locationId === "school";
     interiorTitle.textContent = isSchool ? "Lee Lee School" : "Lee Lee Café";
     interiorDescription.textContent = isSchool
-      ? "Take a lesson to build your education level."
-      : "Warm lights, fresh coffee, and a friendly counter.";
+      ? "Learn something new and unlock opportunities."
+      : "Grab a drink or start your first shift.";
     interiorScreen.dataset.location = locationId;
     cafeActions.hidden = isSchool;
     schoolActions.hidden = !isSchool;
@@ -178,6 +178,7 @@
       ? `Work a shift (+$${CONFIG.economy.cafeShiftPay})`
       : "Get a job";
     interiorScreen.hidden = false;
+    interiorScreen.scrollTop = 0;
     document.body.classList.add("inside-location");
     keys.clear();
     clearTouch();
@@ -365,11 +366,23 @@
         ctx.fillRect(x, windowY, windowWidth, 28);
       }
       ctx.fillStyle = "#795e4c";
-      ctx.fillRect(building.x + building.width / 2 - 12,
-        building.y + building.height - 39, 24, 39);
+      const entrance = world.entrances.find((door) => door.building === building.name);
+      const doorWidth = entrance ? entrance.width : 24;
+      ctx.fillRect(building.x + building.width / 2 - doorWidth / 2,
+        building.y + building.height - 39, doorWidth, 39);
       ctx.fillStyle = "#f3d982";
-      ctx.fillRect(building.x + building.width / 2 + 5,
+      ctx.fillRect(building.x + building.width / 2 + doorWidth / 2 - 7,
         building.y + building.height - 21, 3, 3);
+      if (entrance) {
+        ctx.fillStyle = "#fff6dc";
+        roundedRect(entrance.x - 29, entrance.y + 7, 58, 21, 7);
+        ctx.fill();
+        ctx.fillStyle = "#416b4b";
+        ctx.font = "700 11px 'Trebuchet MS', sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("ENTER ↑", entrance.x, entrance.y + 18);
+      }
     }
   }
 

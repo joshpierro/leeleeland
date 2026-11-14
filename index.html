@@ -19,11 +19,15 @@
       </aside>
       <section id="interior-screen" aria-labelledby="interior-title" hidden>
         <div class="interior-panel">
-          <p class="eyebrow">YOU ARE INSIDE</p>
+          <div class="interior-heading">
+            <p class="eyebrow">YOU ARE INSIDE</p>
+            <button id="exit-location" class="exit-button" type="button">← Exit</button>
+          </div>
           <h1 id="interior-title">Lee Lee Café</h1>
           <p id="interior-description">Warm lights, fresh coffee, and a friendly counter.</p>
           <div class="interior-room" aria-hidden="true">
             <div class="room-window"></div>
+            <div class="room-plant"></div>
             <div class="room-counter"></div>
             <div class="room-cup">☕</div>
           </div>
@@ -35,15 +39,14 @@
           <div id="school-actions" class="interior-actions" hidden>
             <button id="study-education" type="button">Get education (+1 level)</button>
           </div>
-          <button id="exit-location" class="exit-button" type="button">Exit to town</button>
         </div>
       </section>
       <section id="character-select" aria-labelledby="game-title">
         <div class="select-panel">
           <p class="eyebrow">WELCOME TO</p>
           <h1 id="game-title">Lee Lee Land</h1>
-          <p class="subtitle">Who would you like to explore with?</p>
-          <p class="touch-help">On a phone, touch and drag anywhere outside to move.</p>
+          <p class="subtitle">Choose your character</p>
+          <p class="touch-help">Pick a friend, then start exploring.</p>
           <div class="character-options" role="group" aria-label="Choose your character">
             <button class="character-card" type="button" data-character="boy" aria-pressed="false">
               <span class="portrait"><img src="assets/lee-boy.jpg" alt=""></span>
@@ -56,11 +59,11 @@
             <button class="character-card" type="button" data-character="cat" aria-pressed="false">
               <span class="portrait"><img src="assets/lee-cat.png" alt=""></span>
               <span class="character-name">Lee Cat</span>
-              <span class="character-note">Animal friend</span>
             </button>
           </div>
           <p id="selection-status" role="status">Choose a character to begin.</p>
           <button id="start-game" type="button" disabled>Start exploring</button>
+          <p class="movement-tip">In town, touch and drag to move.</p>
         </div>
       </section>
     </main>
