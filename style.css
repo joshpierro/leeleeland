@@ -168,6 +168,11 @@ body {
   font-size: 14px;
 }
 
+#selection-status.selection-needed {
+  color: #9a442c;
+  font-weight: 800;
+}
+
 #start-game {
   width: 100%;
   min-height: 56px;
@@ -181,11 +186,6 @@ body {
   font-weight: 800;
   cursor: pointer;
   touch-action: manipulation;
-}
-
-#start-game:disabled {
-  background: #b7c4b5;
-  cursor: not-allowed;
 }
 
 .movement-tip {

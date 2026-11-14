@@ -64,13 +64,18 @@
       characterCards.forEach((option) => {
         option.setAttribute("aria-pressed", String(option === card));
       });
-      startButton.disabled = false;
+      selectionStatus.classList.remove("selection-needed");
       selectionStatus.textContent = `${CONFIG.characters[selectedCharacter].name} is ready to explore!`;
     });
   });
 
   startButton.addEventListener("click", () => {
-    if (!selectedCharacter) return;
+    if (!selectedCharacter) {
+      selectionStatus.textContent = "First, tap Lee Boy, Lee Girl, or Lee Cat.";
+      selectionStatus.classList.add("selection-needed");
+      characterCards[0].focus();
+      return;
+    }
     gameStarted = true;
     characterSelect.hidden = true;
     updateStatsHud();
@@ -251,7 +256,16 @@
   function roundedRect(x, y, width, height, radius) {
     const r = Math.min(radius, width / 2, height / 2);
     ctx.beginPath();
-    ctx.roundRect(x, y, width, height, r);
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + width - r, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+    ctx.lineTo(x + width, y + height - r);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+    ctx.lineTo(x + r, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
   }
 
   function drawDistricts() {
